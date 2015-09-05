@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no;" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>门票预定|手机官网</title>
+    <script src="/Js/jquery-1.9.1.min.js"></script>
+    <link href="/Style/layout.css" rel="stylesheet" />
+</head>
+<body>
+    <section id="web_wrap">
+        <!--//页面头部-->
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/head02.htm")))
+        <!--End页面头部-->
+
+        <div class="book_con">
+            <div class="book_nav">
+                <a href="javascript:;" class="book_nav01 active">①填写信息</a>
+                <a href="javascript:;" class="book_nav02 active">②确认信息</a>
+                <a href="javascript:;" class="book_nav03 active">③网上支付</a>
+                <a href="javascript:;" class="book_nav04">④购票完成</a>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">支付方式：</div>
+                    <div class="book_box_text_right"></div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="pay_select">
+                        <input name="pay_type" checked="checked" type="radio" value="union">
+                        <img src="/book/images/wx.jpg" alt="" style="width: 35%;">
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div class="book_box_btn">
+                    <a href="@ViewData["Prev"]">上一步</a>
+                    <a href="javascript:;" class="active" id="pay">立即支付</a>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <div class="book_box_text" style="border: none;">
+                    <p><i>▲</i>支付协议：确认支付前，请点击<a href="javascript:;">《购票须知》</a>仔细阅读条款，点击'立即支付'后，则表明您仔细阅读并接受协议的所有条款，将不能取消本次操作，系统将立即完成购票流程。</p>
+                    <p><i>▲</i>如果您用专业版支付，银联将不提供交易成功的反馈，请用各银行网站支付界面支付。</p>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+        </div>
+
+        <!-- 协议弹窗 -->
+        <div class="contract_pop">
+            <div class="contract">
+                <div class="contract_top">
+                    电子购票协议
+                </div>
+
+                <div class="contract_middle">
+                    <h3>套票说明：</h3>
+                    <p>1） 亲子套票（一大一小）：包含一位成人和一位1.2m-1.5m之间的小孩。</p>
+                    <p>2） 家庭套票（两大一小）：内容：包含两位成人和一位1.2m-1.5m之间的小孩。</p>
+
+                    <h3>购票说明：</h3>
+                    <p>1、如需当天游玩，预订时间截止至游玩当天早上8点。建议提前一天预订。预订成功后您将会收到预订成功的短信。 </p>
+                    <p>2、景区实行二维码刷码入园或刷身份证入园。您只需拿您的手机或身份证，直接至检票口刷码入园。建议游客游玩时带上身份证。</p>
+                    <p>3、在线订票只有在线支付可以享受优惠政策,只预订不支付者不享受任何折扣待遇。</p>
+                    <p>4、如您和您的亲朋好友不能同时入园，建议按入园人数分批下单,方便您分批入园。</p>
+                    <p>5、如需修改订单日期或者退款，请提前与网站客服人员联系；如出现未收到预订成功短信或二维码彩信.</p>
+                </div>
+
+                <div class="contract_bottom">
+                    <a href="javascript:;">我不同意</a>
+                    <a href="javascript:;">我同意</a>
+                </div>
+            </div>
+            <div class="contract_bg"></div>
+        </div>
+        <!-- 协议弹窗end -->
+
+        <!-- 底部导航 -->
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/footer.htm")))
+        <!-- 底部导航end -->
+    </section>
+</body>
+</html>
+@Html.Raw(File.ReadAllText(Server.MapPath("/include/Add.htm")))
+<script src="~/js/jquery-1.9.1.min.js"></script>
+<script>
+    $('#pay').one('click', function () {
+        location.href = "/WxPay/WxPayIndex";
+    })
+</script>

@@ -1,0 +1,148 @@
+﻿@model ZhifuWeb.Models.ShopCarViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no;" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>门票预定|手机官网</title>
+    <script src="/Js/jquery-1.9.1.min.js"></script>
+    <link href="/Style/layout.css" rel="stylesheet" />
+</head>
+<body>
+    <section id="web_wrap">
+        <!--//页面头部-->
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/head02.htm")))
+        <!--End页面头部-->
+
+        <div class="book_con">
+            <div class="book_nav">
+                <a href="javascript:;" class="book_nav01 active">①填写信息</a>
+                <a href="javascript:;" class="book_nav02 active">②确认信息</a>
+                <a href="javascript:;" class="book_nav03">③网上支付</a>
+                <a href="javascript:;" class="book_nav04">④购票完成</a>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">门票类型：</div>
+
+                    <div class="book_box_text_right">
+
+                        @foreach (var item in Model.CardInfo)
+                        {
+                            if (item.SumCount == 0)
+                            {
+                                continue;
+                            }
+                            <em><i>@item.ClassName</i> @item.SumCount 张</em>
+                        }
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">姓名：</div>
+
+                    <div class="book_box_text_right">
+                        @Model.UserInfo.Name
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">身份证号码：</div>
+
+                    <div class="book_box_text_right">
+                        @Model.UserInfo.UserCard
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">移动电话：</div>
+
+                    <div class="book_box_text_right">
+                        @Model.UserInfo.Phone
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">应付金额：</div>
+
+                    <div class="book_box_text_right">
+                        <em><i>￥@Model.UserInfo.SumPrice</i>元</em>
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div class="book_box_btn">
+                    <a href="javascript:;" class="active" id="submitOrder">提交订单</a>
+                    <a href="@Url.Action("InformationCard", "Booking")">返回修改</a>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <div class="book_box_text" style="border: none;">
+                    <p>
+                        <i>▲</i>您只需拿您的手机二维码或身份证，直接至检票口刷码入园。
+                    </p>
+                    <p>
+                        <i>▲</i>请仔细核对订票人信息，以免导致无法取票。因信息填写错误导致无法取票，责任自负！
+                    </p>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/footer.htm")))
+        <!-- 底部导航end -->
+    </section>
+</body>
+</html>
+@Html.Raw(File.ReadAllText(Server.MapPath("/include/Add.htm")))
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script>
+    var src = "";
+    $('#submitOrder').one('click', function () {
+        location.href = src;
+    });
+    $(function () {
+        var flag = is_weixin();
+        if (flag) {
+            src = '@Url.Action("SubmitOrderWx", "Booking")';
+        } else {
+            src = '@Url.Action("SubmitOrder", "Booking")';
+        }
+    });
+    function is_weixin() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/micromessenger/i) == "micromessenger") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

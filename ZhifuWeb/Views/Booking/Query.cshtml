@@ -1,0 +1,102 @@
+﻿@model ZhifuWeb.Models.QueryViewModel
+@using System.Linq
+@using System.Web.Mvc.Html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no;" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>订单查询|手机官网</title>
+    <script src="/Js/jquery-1.9.1.min.js"></script>
+    <link href="/Style/layout.css" rel="stylesheet" />
+</head>
+<body>
+    <section id="web_wrap">
+        <!--//页面头部-->
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/head02.htm")))
+        <!--#include file="/include/head02.htm" -->
+        <!--End页面头部-->
+
+        <div class="book_con">
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <div class="search_box_text">
+                    <p>请输入订票人身份证号</p>
+                    <p>
+                        <form method="get" url="@Url.Action("Query")">
+                            <input type="text" class="input_btn" name="credNo" value="@Model.CredNo" />
+                            <br />@Html.ValidationMessageFor(s => s.CredNo)
+                            <input type="submit" value="查询" class="search_btn" />
+                        </form>
+                    </p>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <h3 class="search_title">查询结果</h3>
+                @{
+                    foreach (var item in Model.Orders)
+                    {
+                        string src = "", alt = "";
+
+                        switch (item.ClassName)
+                        {
+                            case "半价票": src = "/book/images/search_pic01.jpg"; alt = "半价票"; break;
+                            case "家庭套票": src = "/book/images/search_pic03.jpg"; alt = "家庭套票"; break;
+                            case "亲子套票": src = "/book/images/search_pic04.jpg"; alt = "亲子套票"; break;
+                            case "大学生门票": src = "/book/images/search_pic05.jpg"; alt = "大学生门票"; break;
+                            case "全价票": src = "/book/images/search_pic06.jpg"; alt = "全价票"; break;
+
+                            case "家庭卡": src = "/book/images/search_pic03.jpg"; alt = "家庭卡"; break;
+                            case "成人卡": src = "/book/images/search_pic06.jpg"; alt = "成人卡"; break;
+                            case "半价卡": src = "/book/images/search_pic01.jpg"; alt = "半价卡"; break;
+                            case "双人年卡": src = "/book/images/search_pic02.jpg"; alt = "双人年卡"; break;
+
+                        }
+                    <div class="search_box_con">
+                        <div class="search_time">
+                            订单时间：@item.AddTime.ToString("yyyy-MM-dd hh:mm") 网上订票
+                        </div>
+
+                        <div class="search_con">
+                            <div class="search_left">
+                                <img src="@src" alt="@alt">
+                            </div>
+
+                            <div class="search_right">
+                                <h3>@item.ClassName<i>数量：@item.Rtong</i></h3>
+                                <h4>单价:￥@item.DiscountPrice 元 <i>总价:￥@item.MunPrice 元</i></h4>
+                                <h5>
+                                    @if (item.IsLingPiao == 0)
+                                    {
+                                        @:未领票
+                                    }
+                                    else
+                                    {
+                                        @:已领票
+                                    }
+                                </h5>
+                            </div>
+
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    }
+                }
+            </div>
+
+            <!-- 底部导航 -->
+            @Html.Raw(File.ReadAllText(Server.MapPath("/include/footer.htm")))
+            <!-- 底部导航end -->
+    </section>
+</body>
+</html>
+@Html.Raw(File.ReadAllText(Server.MapPath("/include/Add.htm")))

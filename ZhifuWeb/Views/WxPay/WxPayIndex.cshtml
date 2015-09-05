@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>微信支付</title>
+</head>
+<body>
+    <div style="position: absolute; top: 50%; left: 50%;">
+        <img src="/book/images/loading.gif" />
+        <b>正在加载中...</b>
+    </div>
+</body>
+</html>
+<script src="~/js/jquery-1.9.1.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('img').show();
+        //1.config
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '@ViewData["appid"]', // 必填，公众号的唯一标识
+            timestamp: '@ViewData["timestamp"]', // 必填，生成签名的时间戳
+            nonceStr: '@ViewData["nonceStr"]', // 必填，生成签名的随机串
+            signature: '@ViewData["signature"]', // 必填，签名，见附录1
+            jsApiList: ['checkJsApi', 'chooseWXPay']
+        });
+        //2.ready
+        wx.ready(function () {
+            wx.chooseWXPay({
+                timestamp: '@ViewData["timestamp2"]', // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: '@ViewData["nonceStr2"]', // 支付签名随机串，不长于 32 位
+                package: '@ViewData["package2"]', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: '@ViewData["signType2"]', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: '@ViewData["paySign2"]', // 支付签名
+                success: function (res) {
+                    location.href = "/WxPay/WxPayResult";
+                },
+                fail: function () {
+                    errorOperator();
+                }, cancel: function () {
+                    errorOperator();
+                }
+            });
+        });
+        wx.error(function (res) {
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            errorOperator();
+        });
+    });
+    function errorOperator() {
+        Location.href = "WxPay/wxPayResult?status=error";
+    }
+</script>

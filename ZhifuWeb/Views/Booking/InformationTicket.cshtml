@@ -1,0 +1,188 @@
+﻿@using System.Web.Mvc.Html
+@using ZhifuWeb.Helper
+@using ZhifuWeb.Models
+@model ZhifuWeb.Models.UserViewModel
+@{
+    string name = "", userCard = "", phone = "", goDate = "";
+    var shopCarViewModel = Session["Car"] as ShopCarViewModel;
+    if (shopCarViewModel != null && shopCarViewModel.UserInfo != null)
+    {
+        name = shopCarViewModel.UserInfo.Name.SetNull();
+        userCard = shopCarViewModel.UserInfo.UserCard.SetNull();
+        phone = shopCarViewModel.UserInfo.Phone.SetNull();
+        goDate = shopCarViewModel.UserInfo.GoDate.ToString("yyyy-MM-dd").SetNull();
+    }
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no;" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>门票预定|手机官网</title>
+    <script src="/Js/jquery-1.9.1.min.js"></script>
+    <link href="/Style/layout.css" rel="stylesheet" />
+</head>
+<body>
+    <section id="web_wrap">
+        <!--//页面头部-->
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/head02.htm")))
+        <!--End页面头部-->
+
+        <div class="book_con">
+            <div class="book_nav">
+                <a href="javascript:;" class="book_nav01 active">①填写信息</a>
+                <a href="javascript:;" class="book_nav02">②确认信息</a>
+                <a href="javascript:;" class="book_nav03">③网上支付</a>
+                <a href="javascript:;" class="book_nav04">④购票完成</a>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+                <!-- book_box_text -->
+                <div class="book_box_text">
+                    <div class="book_box_text_left">门票类型：</div>
+                    <div class="book_box_text_right">
+                        @if (shopCarViewModel != null)
+                        {
+                            foreach (var item in shopCarViewModel.TicketInfo)
+                            {
+                                if (item.SumCount == 0)
+                                {
+                                    continue;
+                                }
+                                <em><i>@item.ClassName</i> @item.SumCount 张</em>
+                            }
+                        }
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <form action="@Url.Action("InformationTicket", "Booking")" method="post">
+
+                    <!-- book_box_text -->
+                    <div class="book_box_text">
+                        <div class="book_box_text_left">姓名：</div>
+
+                        <div class="book_box_text_right">
+                            @Html.TextBoxFor(s => s.Name, name)
+                            <br />@Html.ValidationMessageFor(s => s.Name, "", new { Class = "red" })
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+
+                    <!-- book_box_text -->
+                    <div class="book_box_text">
+                        <div class="book_box_text_left">身份证号码：</div>
+
+                        <div class="book_box_text_right">
+                            @Html.TextBoxFor(s => s.UserCard, userCard)
+                            <br />@Html.ValidationMessageFor(s => s.UserCard, "", new { Class = "red" })
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+
+                    <!-- book_box_text -->
+                    <div class="book_box_text">
+                        <div class="book_box_text_left">移动电话：</div>
+
+                        <div class="book_box_text_right">
+                            @Html.TextBoxFor(s => s.Phone, phone)
+                            <br />@Html.ValidationMessageFor(s => s.Phone, "", new { Class = "red" })
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+
+                    <!-- book_box_text -->
+                    <div class="book_box_text">
+                        <div class="book_box_text_left">入园日期：</div>
+
+                        <div class="book_box_text_right">
+                            @Html.TextBoxFor(s => s.GoDate, goDate, new { @*style = "padding-right: 3em; width: 130px;",*@ Class = "goDate" })
+                            <br />@Html.ValidationMessageFor(s => s.GoDate, "", new { Class = "red" })
+                            @*<i class="date_icon"></i>*@
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+                </form>
+
+                <div class="book_box_btn">
+                    <a href="javascript:;" class="active">下一步</a>
+                    <a href="@Url.Action("chooseTicket", "Booking")">上一步</a>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+
+            <div class="book_box">
+                <div class="cloud_top"></div>
+
+                <div class="book_box_text" style="border: none;">
+                    <p>
+                        <i>▲</i>未成年人请提供监护人电话
+                    </p>
+                    <p>
+                        <i>▲</i>未成年人证件号填户口本上身份证号或监护人身份证号（法定监护人）
+                    </p>
+                    <p>
+                        <i>▲</i>请正确填写订票人信息，以免导致无法取票。因信息填写错误导致无法取票，责任自负！
+                    </p>
+                </div>
+
+                <div class="cloud_bottom"></div>
+            </div>
+        </div>
+
+        <!-- 底部导航 --
+        @Html.Raw(File.ReadAllText(Server.MapPath("/include/footer.htm")))
+        <!-- 底部导航end -->
+        <div id="datePlugin"></div>
+    </section>
+</body>
+</html>
+@Html.Raw(File.ReadAllText(Server.MapPath("/include/Add.htm")))
+<script src="/js/f.js"></script>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<link href="/js/date/common.css" rel="stylesheet" type="text/css" />
+<script src="/js/date/date.js"></script>
+<script src="/js/date/iscroll.js"></script>
+<script>
+    $(function () {
+        $('.goDate').date();
+        $('.goDate').val($('.goDate').val().replace('/', '-').replace('/', '-'));
+    });
+
+    //function checkDate() {
+    //    var rtime = $('.goDate').val();
+    //    var now = GetServerTimeToDate();
+    //    var ua = navigator.userAgent;
+    //    var dt1 = new Date(rtime.replace('-', ',')).setHours(8);
+    //    if (ua.indexOf("Firefox") > -1) {
+    //        dt1 = new Date(rtime).setHours(8);
+    //    }
+    //    if (dt1 < now) {
+    //        alert("您好，08:00以后不能预订当天的门票，请您谅解！");
+    //        return false;
+    //    }
+    //    return true;
+    //}
+
+    //function GetServerTimeToDate() {
+    //    var date;
+    //    $.post("/Booking/GetServerDate", {}, function(data) {
+    //        return date = new Date(data);
+    //    });
+    //}
+    $('.book_box_btn a').eq(0).click(function () {
+        $('form:first').submit();
+    });
+</script>
